@@ -1,0 +1,24 @@
+{
+  "name": "event-lite",
+  "version": "0.0.1",
+  "description": "Light-weight EventEmitter (less than 1KB when minified)",
+  "main": "event-lite.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kawanet/event-lite.git"
+  },
+  "author": "@kawanet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kawanet/event-lite/issues"
+  },
+  "homepage": "https://github.com/kawanet/event-lite",
+  "devDependencies": {
+    "jshint": "^2.8.0",
+    "mocha": "^2.2.5",
+    "uglifyjs": "^2.4.10"
+  }
+}
