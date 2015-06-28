@@ -19,6 +19,6 @@
   "devDependencies": {
     "jshint": "^2.8.0",
     "mocha": "^2.2.5",
-    "uglifyjs": "^2.4.10"
+    "uglify-js": "^2.4.23"
   }
 }
