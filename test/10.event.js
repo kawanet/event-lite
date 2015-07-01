@@ -80,6 +80,13 @@ function events_test() {
       assert.equal(quux.args[1], "pomu", "second argument");
       done();
     });
+
+    it("return value", function() {
+      assert.equal(event.on(), event);
+      assert.equal(event.once(), event);
+      assert.equal(event.off(), event);
+      assert.equal(event.emit(), false);
+    });
   });
 }
 

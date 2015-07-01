@@ -19,7 +19,7 @@ function EventLite() {
   EventLite.mixin = mixin;
 
   /**
-   * Import on() once() off() methods into target object.
+   * Import on(), once(), off() and emit() methods into target object.
    *
    * @name EventLite.mixin
    * @param target {Prototype}
@@ -30,6 +30,7 @@ function EventLite() {
     for (var key in source) {
       target[key] = source[key];
     }
+    return target;
   }
 
   /**
@@ -37,11 +38,12 @@ function EventLite() {
    *
    * @param type {string}
    * @param func {Function}
+   * @returns {EventLite}
    */
 
   EventLite.prototype.on = function(type, func) {
-    var listners = getListeners(this, type);
-    listners.push(func);
+    getListeners(this, type).push(func);
+    return this;
   };
 
   /**
@@ -49,11 +51,11 @@ function EventLite() {
    *
    * @param type {string}
    * @param func {Function}
+   * @returns {EventLite}
    */
 
   EventLite.prototype.once = function(type, func) {
-    var listners = getListeners(this, type);
-    listners.push(wrap);
+    getListeners(this, type).push(wrap);
     return this;
 
     function wrap() {
@@ -65,8 +67,9 @@ function EventLite() {
   /**
    * Remove an event listener.
    *
-   * @param type {string}
-   * @param func {Function}
+   * @param [type] {string}
+   * @param [func] {Function}
+   * @returns {EventLite}
    */
 
   EventLite.prototype.off = function(type, func) {
@@ -88,16 +91,20 @@ function EventLite() {
   /**
    * Event emitter.
    *
-   * @param type
+   * @param type {string}
+   * @param [value] {*}
+   * @returns {boolean}
    */
 
   EventLite.prototype.emit = function(type, value) {
-    var that = this;
     var args = Array.prototype.slice.call(arguments, 1);
-    var listners = getListeners(this, type);
-    listners.forEach(function(func) {
-      func.apply(that, args);
-    });
+    var listeners = getListeners(this, type);
+    listeners.forEach(run.bind(this));
+    return !!listeners.length;
+
+    function run(func) {
+      func.apply(this, args);
+    }
   };
 
   function getListeners(that, type) {
