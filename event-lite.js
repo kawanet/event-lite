@@ -5,6 +5,19 @@
  * @license MIT
  * @returns {EventLite}
  * @constructor
+ * @example
+ * var EventLite = require("event-lite");
+ *
+ * function MyClass() {...}             // your class
+ *
+ * EventLite.mixin(MyClass.prototype);  // import event methods
+ *
+ * var obj = new MyClass();
+ * obj.on("foo", function() {...});     // add event listener
+ * obj.once("bar", function() {...});   // add one-time event listener
+ * obj.emit("foo");                     // dispatch event
+ * obj.emit("bar");                     // dispatch another event
+ * obj.off("foo");                      // remove event listener
  */
 
 function EventLite() {
@@ -14,6 +27,17 @@ function EventLite() {
 (function(EventLite) {
   // export the class for node.js
   if ("undefined" !== typeof module) module.exports = EventLite;
+
+  // methods to export
+  var methods = {
+    on: on,
+    once: once,
+    off: off,
+    emit: emit
+  };
+
+  // mixin to self
+  mixin(EventLite.prototype);
 
   // export mixin function
   EventLite.mixin = mixin;
@@ -26,35 +50,36 @@ function EventLite() {
    */
 
   function mixin(target) {
-    var source = EventLite.prototype;
-    for (var key in source) {
-      target[key] = source[key];
+    for (var key in methods) {
+      target[key] = methods[key];
     }
     return target;
   }
 
   /**
-   * Add an event listner.
+   * Add an event listener.
    *
+   * @name EventLite.prototype.on
    * @param type {string}
    * @param func {Function}
    * @returns {EventLite}
    */
 
-  EventLite.prototype.on = function(type, func) {
+  function on(type, func) {
     getListeners(this, type).push(func);
     return this;
-  };
+  }
 
   /**
-   * Add one-time event listner.
+   * Add one-time event listener.
    *
+   * @name EventLite.prototype.once
    * @param type {string}
    * @param func {Function}
    * @returns {EventLite}
    */
 
-  EventLite.prototype.once = function(type, func) {
+  function once(type, func) {
     getListeners(this, type).push(wrap);
     return this;
 
@@ -62,17 +87,18 @@ function EventLite() {
       this.off(type, wrap);
       func.apply(this, arguments);
     }
-  };
+  }
 
   /**
    * Remove an event listener.
    *
+   * @name EventLite.prototype.off
    * @param [type] {string}
    * @param [func] {Function}
    * @returns {EventLite}
    */
 
-  EventLite.prototype.off = function(type, func) {
+  function off(type, func) {
     var listners = getListeners(this, type);
     if (!type) {
       delete this.listeners;
@@ -86,17 +112,18 @@ function EventLite() {
     function ne(test) {
       return test !== func;
     }
-  };
+  }
 
   /**
-   * Event emitter.
+   * Dispatch (trigger) an event.
    *
+   * @name EventLite.prototype.emit
    * @param type {string}
    * @param [value] {*}
    * @returns {boolean}
    */
 
-  EventLite.prototype.emit = function(type, value) {
+  function emit(type, value) {
     var args = Array.prototype.slice.call(arguments, 1);
     var listeners = getListeners(this, type);
     listeners.forEach(run.bind(this));
@@ -105,7 +132,7 @@ function EventLite() {
     function run(func) {
       func.apply(this, args);
     }
-  };
+  }
 
   function getListeners(that, type) {
     var listeners = that.listeners || (that.listeners = {});
