@@ -1,6 +1,6 @@
 {
   "name": "event-lite",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Light-weight EventEmitter (less than 1KB when minified)",
   "main": "event-lite.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kawanet/event-lite.git"
+    "url": "https://github.com/kawanet/event-lite.git"
   },
   "author": "@kawanet",
   "license": "MIT",
