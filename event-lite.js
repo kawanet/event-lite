@@ -3,8 +3,9 @@
  *
  * @copyright Yusuke Kawasaki
  * @license MIT
- * @returns {EventLite}
  * @constructor
+ * @see https://github.com/kawanet/event-lite
+ * @see http://kawanet.github.io/event-lite/EventLite.html
  * @example
  * var EventLite = require("event-lite");
  *
@@ -45,7 +46,7 @@ function EventLite() {
   /**
    * Import on(), once(), off() and emit() methods into target object.
    *
-   * @name EventLite.mixin
+   * @function EventLite.mixin
    * @param target {Prototype}
    */
 
@@ -59,10 +60,10 @@ function EventLite() {
   /**
    * Add an event listener.
    *
-   * @name EventLite.prototype.on
+   * @function EventLite.prototype.on
    * @param type {string}
    * @param func {Function}
-   * @returns {EventLite}
+   * @returns {EventLite} Self for method chaining
    */
 
   function on(type, func) {
@@ -73,10 +74,10 @@ function EventLite() {
   /**
    * Add one-time event listener.
    *
-   * @name EventLite.prototype.once
+   * @function EventLite.prototype.once
    * @param type {string}
    * @param func {Function}
-   * @returns {EventLite}
+   * @returns {EventLite} Self for method chaining
    */
 
   function once(type, func) {
@@ -92,10 +93,10 @@ function EventLite() {
   /**
    * Remove an event listener.
    *
-   * @name EventLite.prototype.off
+   * @function EventLite.prototype.off
    * @param [type] {string}
    * @param [func] {Function}
-   * @returns {EventLite}
+   * @returns {EventLite} Self for method chaining
    */
 
   function off(type, func) {
@@ -117,10 +118,10 @@ function EventLite() {
   /**
    * Dispatch (trigger) an event.
    *
-   * @name EventLite.prototype.emit
+   * @function EventLite.prototype.emit
    * @param type {string}
    * @param [value] {*}
-   * @returns {boolean}
+   * @returns {boolean} True when a listener received the event
    */
 
   function emit(type, value) {

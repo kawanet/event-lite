@@ -2,7 +2,7 @@
 
 Light-weight EventEmitter (less than 1KB when minified)
 
-## Usage
+### Usage
 
 ```js
 var EventLite = require("event-lite");
@@ -19,27 +19,31 @@ obj.emit("bar");                     // dispatch another event
 obj.off("foo");                      // remove event listener
 ```
 
-## Node.js
+### Node.js
 
 ```sh
 npm install event-lite --save
 ```
 
-## Browsers
+### Browsers
 
 ```html
 <script src="https://raw.githubusercontent.com/kawanet/event-lite/master/dist/event-lite.min.js"></script>
 ```
 
-## Repository
+### Repository
 
-https://github.com/kawanet/event-lite
+- https://github.com/kawanet/event-lite
 
-## See Also
+### Documentation
+
+- http://kawanet.github.io/event-lite/EventLite.html
+
+### See Also
 
 - https://nodejs.org/api/events.html
 
-## License
+### License
 
 The MIT License (MIT)
 
