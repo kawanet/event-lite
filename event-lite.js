@@ -84,11 +84,12 @@ function EventLite() {
    */
 
   function once(type, func) {
-    getListeners(this, type).push(wrap);
-    return this;
+    var that = this;
+    getListeners(that, type).push(wrap);
+    return that;
 
     function wrap() {
-      this.off(type, wrap);
+      off.call(that, type, wrap);
       func.apply(this, arguments);
     }
   }
@@ -103,21 +104,22 @@ function EventLite() {
    */
 
   function off(type, func) {
+    var that = this;
     var listners;
     if (!type) {
-      delete this[LISTENERS];
+      delete that[LISTENERS];
     } else if (!func) {
-      delete this[LISTENERS][type];
-      if (!Object.keys(this[LISTENERS]).length) return this.off();
+      delete that[LISTENERS][type];
+      if (!Object.keys(that[LISTENERS]).length) return off.call(that);
     } else {
-      listners = getListeners(this, type, true);
+      listners = getListeners(that, type, true);
       if (listners) {
         listners = listners.filter(ne);
-        if (!listners.length) return this.off(type);
-        this[LISTENERS][type] = listners;
+        if (!listners.length) return off.call(that, type);
+        that[LISTENERS][type] = listners;
       }
     }
-    return this;
+    return that;
 
     function ne(test) {
       return test !== func;
@@ -134,14 +136,15 @@ function EventLite() {
    */
 
   function emit(type, value) {
+    var that = this;
     var args = Array.prototype.slice.call(arguments, 1);
-    var listeners = getListeners(this, type, true);
+    var listeners = getListeners(that, type, true);
     if (!listeners) return false;
-    listeners.forEach(run.bind(this));
+    listeners.forEach(run);
     return !!listeners.length;
 
     function run(func) {
-      func.apply(this, args);
+      func.apply(that, args);
     }
   }
 
