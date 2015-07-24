@@ -1,12 +1,13 @@
-#!/usr/bin/env ./node_modules/.bin/mocha -R spec
+#!/usr/bin/env mocha -R spec
 
 var assert = require("assert");
 var EventLite = require("../event-lite");
+var TITLE = __filename.replace(/^.*\//, "") + ":";
 
 events_test();
 
 function events_test() {
-  describe("EventLite", function() {
+  describe(TITLE, function() {
     var event = EventLite();
 
     event.on("foo", foo);

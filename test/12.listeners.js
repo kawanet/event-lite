@@ -2,11 +2,12 @@
 
 var assert = require("assert");
 var EventLite = require("../event-lite");
+var TITLE = __filename.replace(/^.*\//, "") + ":";
 
 events_test();
 
 function events_test() {
-  describe("EventLite", function() {
+  describe(TITLE, function() {
 
     it("on() adds listeners property", function(done) {
       var event = EventLite();

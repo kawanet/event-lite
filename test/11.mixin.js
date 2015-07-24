@@ -1,7 +1,8 @@
-#!/usr/bin/env ./node_modules/.bin/mocha -R spec
+#!/usr/bin/env mocha -R spec
 
 var assert = require("assert");
 var EventLite = require("../event-lite");
+var TITLE = __filename.replace(/^.*\//, "") + ":";
 
 function MyEvent() {
   if (!(this instanceof MyEvent)) return new MyEvent();
@@ -13,7 +14,7 @@ EventLite.mixin(MyEvent.prototype);
 events_test();
 
 function events_test() {
-  describe("EventLite.mixin", function() {
+  describe(TITLE, function() {
     var event = MyEvent();
 
     event.on("foo", foo);
