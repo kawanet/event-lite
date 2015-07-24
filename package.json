@@ -26,5 +26,11 @@
     "jshint": "^2.8.0",
     "mocha": "^2.2.5",
     "uglify-js": "^2.4.23"
+  },
+  "jshintConfig": {
+    "undef": true,
+    "globals": {
+      "module": true
+    }
   }
 }
