@@ -29,6 +29,9 @@ function EventLite() {
   // export the class for node.js
   if ("undefined" !== typeof module) module.exports = EventLite;
 
+  // property name to hold listeners
+  var LISTENERS = "listeners";
+
   // methods to export
   var methods = {
     on: on,
@@ -100,13 +103,19 @@ function EventLite() {
    */
 
   function off(type, func) {
-    var listners = getListeners(this, type);
+    var listners;
     if (!type) {
-      delete this.listeners;
+      delete this[LISTENERS];
     } else if (!func) {
-      delete this.listeners[type];
+      delete this[LISTENERS][type];
+      if (!Object.keys(this[LISTENERS]).length) return this.off();
     } else {
-      this.listeners[type] = listners.filter(ne);
+      listners = getListeners(this, type, true);
+      if (listners) {
+        listners = listners.filter(ne);
+        if (!listners.length) return this.off(type);
+        this[LISTENERS][type] = listners;
+      }
     }
     return this;
 
@@ -126,7 +135,8 @@ function EventLite() {
 
   function emit(type, value) {
     var args = Array.prototype.slice.call(arguments, 1);
-    var listeners = getListeners(this, type);
+    var listeners = getListeners(this, type, true);
+    if (!listeners) return false;
     listeners.forEach(run.bind(this));
     return !!listeners.length;
 
@@ -135,8 +145,13 @@ function EventLite() {
     }
   }
 
-  function getListeners(that, type) {
-    var listeners = that.listeners || (that.listeners = {});
+  /**
+   * @ignore
+   */
+
+  function getListeners(that, type, readonly) {
+    if (readonly && !that[LISTENERS]) return;
+    var listeners = that[LISTENERS] || (that[LISTENERS] = {});
     return listeners[type] || (listeners[type] = []);
   }
 
