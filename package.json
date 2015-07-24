@@ -1,6 +1,6 @@
 {
   "name": "event-lite",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Light-weight EventEmitter (less than 1KB when minified)",
   "main": "event-lite.js",
   "scripts": {
