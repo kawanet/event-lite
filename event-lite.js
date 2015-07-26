@@ -109,8 +109,11 @@ function EventLite() {
     if (!type) {
       delete that[LISTENERS];
     } else if (!func) {
-      delete that[LISTENERS][type];
-      if (!Object.keys(that[LISTENERS]).length) return off.call(that);
+      listners = that[LISTENERS];
+      if (listners) {
+        delete listners[type];
+        if (!Object.keys(listners).length) return off.call(that);
+      }
     } else {
       listners = getListeners(that, type, true);
       if (listners) {
