@@ -1,4 +1,4 @@
-# event-lite.js [![Build Status](https://travis-ci.org/kawanet/event-lite.svg?branch=master)](https://travis-ci.org/kawanet/event-lite)
+# event-lite.js [![npm version](https://badge.fury.io/js/event-lite.svg)](http://badge.fury.io/js/event-lite) [![Build Status](https://travis-ci.org/kawanet/event-lite.svg?branch=master)](https://travis-ci.org/kawanet/event-lite)
 
 Light-weight EventEmitter (less than 1KB when minified)
 
