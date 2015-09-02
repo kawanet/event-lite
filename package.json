@@ -15,9 +15,8 @@
   },
   "homepage": "https://github.com/kawanet/event-lite",
   "jshintConfig": {
-    "globals": {
-      "module": true
-    },
+    "mocha": true,
+    "node": true,
     "undef": true
   },
   "keywords": [

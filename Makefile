@@ -28,7 +28,7 @@ test-node: jshint $(DEST)
 	$(MOCHA) -R spec $(TESTS)
 
 jshint:
-	$(JSHINT) $(SRC)
+	$(JSHINT) $(SRC) $(TESTS)
 
 jsdoc: $(DOC_HTML)
 
