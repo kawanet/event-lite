@@ -21,7 +21,10 @@ clean:
 $(DEST): $(SRC)
 	$(UGLIFYJS) $(SRC) -c -m -o $(DEST)
 
-test: jshint $(DEST)
+test:
+	@if [ "x$(BROWSER)" = "x" ]; then make test-node; else make test-browser; fi
+
+test-node: jshint $(DEST)
 	$(MOCHA) -R spec $(TESTS)
 
 jshint:
