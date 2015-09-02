@@ -10,7 +10,8 @@
     "jsdoc": "^3.3.2",
     "jshint": "^2.8.0",
     "mocha": "^2.3.0",
-    "uglify-js": "^2.4.24"
+    "uglify-js": "^2.4.24",
+    "zuul": "^3.4.0"
   },
   "homepage": "https://github.com/kawanet/event-lite",
   "jshintConfig": {

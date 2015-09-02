@@ -2,6 +2,7 @@
 
 SRC=./event-lite.js
 DEST=./dist/event-lite.min.js
+TESTS=test/*.js
 JSHINT=./node_modules/.bin/jshint
 UGLIFYJS=./node_modules/.bin/uglifyjs
 MOCHA=./node_modules/.bin/mocha
@@ -21,12 +22,18 @@ $(DEST): $(SRC)
 	$(UGLIFYJS) $(SRC) -c -m -o $(DEST)
 
 test: jshint $(DEST)
-	$(MOCHA) -R spec test/*.js
+	$(MOCHA) -R spec $(TESTS)
 
 jshint:
 	$(JSHINT) $(SRC)
 
 jsdoc: $(DOC_HTML)
+
+test-browser:
+	./node_modules/.bin/zuul -- $(TESTS)
+
+test-browser-local:
+	./node_modules/.bin/zuul --local -- $(TESTS)
 
 $(DOC_HTML): README.md $(SRC) $(DOCS_CSS_SRC)
 	mkdir -p $(DOCS_DIR)

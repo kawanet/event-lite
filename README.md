@@ -2,6 +2,8 @@
 
 Light-weight EventEmitter (less than 1KB when minified)
 
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/event-lite.svg)](https://saucelabs.com/u/event-lite)
+
 ### Usage
 
 ```js
