@@ -140,13 +140,28 @@ function EventLite() {
 
   function emit(type, value) {
     var that = this;
-    var args = Array.prototype.slice.call(arguments, 1);
     var listeners = getListeners(that, type, true);
     if (!listeners) return false;
-    listeners.forEach(run);
+    var arglen = arguments.length;
+    if (arglen === 1) {
+      listeners.forEach(zeroarg);
+    } else if (arglen === 2) {
+      listeners.forEach(onearg);
+    } else {
+      var args = Array.prototype.slice.call(arguments, 1);
+      listeners.forEach(moreargs);
+    }
     return !!listeners.length;
 
-    function run(func) {
+    function zeroarg(func) {
+      func.call(that);
+    }
+
+    function onearg(func) {
+      func.call(that, value);
+    }
+
+    function moreargs(func) {
       func.apply(that, args);
     }
   }
