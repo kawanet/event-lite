@@ -11,9 +11,11 @@ function events_test() {
 
     it("on() adds listeners property", function(done) {
       var event = EventLite();
-      event.on("foo");
+      event.on("foo", NOP);
       assert.ok(event.listeners instanceof Object, "listeners property should be an Object");
-      assert.ok(event.listeners.foo instanceof Array, "listeners.foo property should be an Array");
+      assert.ok(event.listeners.foo instanceof Function, "listeners.foo property should be a function");
+      event.on("foo", NOP);
+      assert.ok(event.listeners.foo instanceof Array, "listeners.foo property should be an array");
       done();
     });
 
@@ -29,6 +31,15 @@ function events_test() {
       event.on("foo", NOP);
       event.off("foo", NOP);
       assert.equal(event.listeners, null, "listeners property should be removed");
+      done();
+    });
+    
+    it("off() should optimize single-item arrays into functions", function(done) {
+      var event = EventLite();
+      event.on("foo", NOP);
+      event.on("foo", NOP);
+      event.off("foo", NOP);
+      assert.ok(event.listeners.foo instanceof Function, "listeners.foo property should be a function");
       done();
     });
   });

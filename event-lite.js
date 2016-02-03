@@ -70,7 +70,7 @@ function EventLite() {
    */
 
   function on(type, func) {
-    getListeners(this, type).push(func);
+    newListener(this, type, func);
     return this;
   }
 
@@ -85,7 +85,7 @@ function EventLite() {
 
   function once(type, func) {
     var that = this;
-    getListeners(that, type).push(wrap);
+    newListener(that, type, wrap);
     return that;
 
     function wrap() {
@@ -106,7 +106,7 @@ function EventLite() {
   function off(type, func) {
     var that = this;
     var listners;
-    if (!type) {
+    if (!arguments.length) {
       delete that[LISTENERS];
     } else if (!func) {
       listners = that[LISTENERS];
@@ -115,18 +115,23 @@ function EventLite() {
         if (!Object.keys(listners).length) return off.call(that);
       }
     } else {
-      listners = getListeners(that, type, true);
+      listners = getListeners(that, type);
       if (listners) {
-        listners = listners.filter(ne);
-        if (!listners.length) return off.call(that, type);
-        that[LISTENERS][type] = listners;
+        if (listners === func) {
+          return off.call(that, type);
+        } else {
+          var index = listners.indexOf(func);
+          if (index >= 0) {
+            if (listners.length === 2) {
+              that[LISTENERS][type] = index === 0 ? listners[1] : listners[0];
+            } else {
+              listners.splice(index, 1);
+            }
+          }
+        }
       }
     }
     return that;
-
-    function ne(test) {
-      return test !== func;
-    }
   }
 
   /**
@@ -138,42 +143,52 @@ function EventLite() {
    * @returns {boolean} True when a listener received the event
    */
 
-  function emit(type, value) {
+  function emit(type, value, value2) {
     var that = this;
-    var listeners = getListeners(that, type, true);
+    var listeners = getListeners(that, type);
     if (!listeners) return false;
     var arglen = arguments.length;
-    if (arglen === 1) {
-      listeners.forEach(zeroarg);
-    } else if (arglen === 2) {
-      listeners.forEach(onearg);
-    } else {
-      var args = Array.prototype.slice.call(arguments, 1);
-      listeners.forEach(moreargs);
+    if (typeof listeners === 'function') {
+      if (arglen === 1) {
+        listeners.call(that);
+      } else if (arglen === 2) {
+        listeners.call(that, value);
+      } else if (arglen === 3) {
+        listeners.call(that, value, value2);
+      } else {
+        listeners.apply(that, Array.prototype.slice.call(arguments, 1));
+      }
+      return true;
     }
-    return !!listeners.length;
-
-    function zeroarg(func) {
-      func.call(that);
+    var args = Array.prototype.slice.call(arguments, 1);
+    for (var i = 0, len = listeners.length; i < len; i++) {
+      listeners[i].apply(that, args);
     }
-
-    function onearg(func) {
-      func.call(that, value);
-    }
-
-    function moreargs(func) {
-      func.apply(that, args);
-    }
+    return !!len;
   }
 
   /**
    * @ignore
    */
 
-  function getListeners(that, type, readonly) {
-    if (readonly && !that[LISTENERS]) return;
+  function getListeners(that, type) {
+    return that[LISTENERS] && that[LISTENERS][type];
+  }
+
+  /**
+   * @ignore
+   */
+
+  function newListener(that, type, func) {
     var listeners = that[LISTENERS] || (that[LISTENERS] = {});
-    return listeners[type] || (listeners[type] = []);
+    var ofType = listeners[type];
+    if (!ofType) {
+      listeners[type] = func;
+    } else if (typeof ofType === 'function') {
+      listeners[type] = [ofType, func];
+    } else {
+      listeners[type].push(func);
+    }
   }
 
 })(EventLite);
