@@ -70,7 +70,7 @@ function EventLite() {
    */
 
   function on(type, func) {
-    getListeners(this, type).push(func);
+    newListener(this, type, func);
     return this;
   }
 
@@ -85,7 +85,8 @@ function EventLite() {
 
   function once(type, func) {
     var that = this;
-    getListeners(that, type).push(wrap);
+    wrap.original = func;
+    newListener(that, type, wrap);
     return that;
 
     function wrap() {
@@ -106,7 +107,7 @@ function EventLite() {
   function off(type, func) {
     var that = this;
     var listners;
-    if (!type) {
+    if (!arguments.length) {
       delete that[LISTENERS];
     } else if (!func) {
       listners = that[LISTENERS];
@@ -115,18 +116,27 @@ function EventLite() {
         if (!Object.keys(listners).length) return off.call(that);
       }
     } else {
-      listners = getListeners(that, type, true);
+      listners = getListeners(that, type);
       if (listners) {
-        listners = listners.filter(ne);
-        if (!listners.length) return off.call(that, type);
-        that[LISTENERS][type] = listners;
+        if (typeof listners === 'function') {
+          if (listners === func || listners.original === func) {
+            return off.call(that, type);
+          }
+        } else {
+          for (var i = 0, len = listners.length; i < len; i++) {
+            if (listners[i] === func || listners[i].original === func) {
+              if (listners.length === 2) {
+                that[LISTENERS][type] = (i === 0 ? listners[1] : listners[0]);
+              } else {
+                listners.splice(i, 1);
+              }
+              break;
+            }
+          }
+        }
       }
     }
     return that;
-
-    function ne(test) {
-      return test !== func;
-    }
   }
 
   /**
@@ -138,42 +148,93 @@ function EventLite() {
    * @returns {boolean} True when a listener received the event
    */
 
-  function emit(type, value) {
+  function emit(type, value1, value2) {
     var that = this;
-    var listeners = getListeners(that, type, true);
+    var listeners = getListeners(that, type);
     if (!listeners) return false;
+    var args;
     var arglen = arguments.length;
-    if (arglen === 1) {
-      listeners.forEach(zeroarg);
-    } else if (arglen === 2) {
-      listeners.forEach(onearg);
-    } else {
-      var args = Array.prototype.slice.call(arguments, 1);
-      listeners.forEach(moreargs);
+    var invoker = arglen === 1 ? emitnone :
+                  arglen === 2 ? emitone :
+                  arglen === 3 ? emittwo :
+                  (args = copy(arguments, 1), emitmany);
+    if (typeof listeners === 'function') {
+      invoker(that, listeners, value1, value2, args);
+      return true;
     }
-    return !!listeners.length;
-
-    function zeroarg(func) {
-      func.call(that);
+    listeners = copy(listeners, 0);
+    for (var i = 0, len = listeners.length; i < len; i++) {
+      invoker(that, listeners[i], value1, value2, args);
     }
-
-    function onearg(func) {
-      func.call(that, value);
-    }
-
-    function moreargs(func) {
-      func.apply(that, args);
-    }
+    return !!len;
   }
 
   /**
    * @ignore
    */
 
-  function getListeners(that, type, readonly) {
-    if (readonly && !that[LISTENERS]) return;
+  function emitnone(that, listener) {
+    // I use return here to take advantage of ES6 tail-call optimization.
+    return listener.call(that);
+  }
+
+  /**
+   * @ignore
+   */
+
+  function emitone(that, listener, value) {
+    return listener.call(that, value);
+  }
+
+  /**
+   * @ignore
+   */
+
+  function emittwo(that, listener, value1, value2) {
+    return listener.call(that, value1, value2);
+  }
+
+  /**
+   * @ignore
+   */
+
+  function emitmany(that, listener, value1, value2, args) {
+    return listener.apply(that, args);
+  }
+
+  /**
+   * @ignore
+   */
+
+  function copy(arr, start) {
+    var len = arr.length - start;
+    var ret = new Array(len);
+    for (var i = 0; i < len; i++) {ret[i] = arr[i + start];}
+    return ret;
+  }
+
+  /**
+   * @ignore
+   */
+
+  function getListeners(that, type) {
+    return that[LISTENERS] && that[LISTENERS][type];
+  }
+
+  /**
+   * @ignore
+   */
+
+  function newListener(that, type, func) {
     var listeners = that[LISTENERS] || (that[LISTENERS] = {});
-    return listeners[type] || (listeners[type] = []);
+    var ofType = listeners[type];
+    if (!ofType) {
+      listeners[type] = func;
+    } else if (typeof ofType === 'function') {
+      listeners[type] = [ofType, func];
+    } else {
+      listeners[type].push(func);
+    }
   }
 
 })(EventLite);
