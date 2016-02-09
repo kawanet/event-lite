@@ -85,6 +85,7 @@ function EventLite() {
 
   function once(type, func) {
     var that = this;
+    wrap.original = func;
     newListener(that, type, wrap);
     return that;
 
@@ -117,15 +118,19 @@ function EventLite() {
     } else {
       listners = getListeners(that, type);
       if (listners) {
-        if (listners === func) {
-          return off.call(that, type);
+        if (typeof listners === 'function') {
+          if (listners === func || listners.original === func) {
+            return off.call(that, type);
+          }
         } else {
-          var index = listners.indexOf(func);
-          if (index >= 0) {
-            if (listners.length === 2) {
-              that[LISTENERS][type] = index === 0 ? listners[1] : listners[0];
-            } else {
-              listners.splice(index, 1);
+          for (var i = 0, len = listners.length; i < len; i++) {
+            if (listners[i] === func || listners[i].original === func) {
+              if (listners.length === 2) {
+                that[LISTENERS][type] = (i === 0 ? listners[1] : listners[0]);
+              } else {
+                listners.splice(i, 1);
+              }
+              break;
             }
           }
         }
