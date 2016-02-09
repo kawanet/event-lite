@@ -143,28 +143,69 @@ function EventLite() {
    * @returns {boolean} True when a listener received the event
    */
 
-  function emit(type, value, value2) {
+  function emit(type, value1, value2) {
     var that = this;
     var listeners = getListeners(that, type);
     if (!listeners) return false;
+    var args;
     var arglen = arguments.length;
+    var invoker = arglen === 1 ? emitnone :
+                  arglen === 2 ? emitone :
+                  arglen === 3 ? emittwo :
+                  (args = copy(arguments, 1), emitmany);
     if (typeof listeners === 'function') {
-      if (arglen === 1) {
-        listeners.call(that);
-      } else if (arglen === 2) {
-        listeners.call(that, value);
-      } else if (arglen === 3) {
-        listeners.call(that, value, value2);
-      } else {
-        listeners.apply(that, Array.prototype.slice.call(arguments, 1));
-      }
+      invoker(that, listeners, value1, value2, args);
       return true;
     }
-    var args = Array.prototype.slice.call(arguments, 1);
+    listeners = copy(listeners, 0);
     for (var i = 0, len = listeners.length; i < len; i++) {
-      listeners[i].apply(that, args);
+      invoker(that, listeners[i], value1, value2, args);
     }
     return !!len;
+  }
+
+  /**
+   * @ignore
+   */
+
+  function emitnone(that, listener) {
+    // I use return here to take advantage of ES6 tail-call optimization.
+    return listener.call(that);
+  }
+
+  /**
+   * @ignore
+   */
+
+  function emitone(that, listener, value) {
+    return listener.call(that, value);
+  }
+
+  /**
+   * @ignore
+   */
+
+  function emittwo(that, listener, value1, value2) {
+    return listener.call(that, value1, value2);
+  }
+
+  /**
+   * @ignore
+   */
+
+  function emitmany(that, listener, value1, value2, args) {
+    return listener.apply(that, args);
+  }
+
+  /**
+   * @ignore
+   */
+
+  function copy(arr, start) {
+    var len = arr.length - start;
+    var ret = new Array(len);
+    for (var i = 0; i < len; i++) {ret[i] = arr[i + start];}
+    return ret;
   }
 
   /**
