@@ -85,6 +85,7 @@ function EventLite() {
 
   function once(type, func) {
     var that = this;
+    wrap.originalListener = func;
     getListeners(that, type).push(wrap);
     return that;
 
@@ -106,7 +107,7 @@ function EventLite() {
   function off(type, func) {
     var that = this;
     var listners;
-    if (!type) {
+    if (!arguments.length) {
       delete that[LISTENERS];
     } else if (!func) {
       listners = that[LISTENERS];
@@ -125,7 +126,7 @@ function EventLite() {
     return that;
 
     function ne(test) {
-      return test !== func;
+      return test !== func && (!test.originalListener || test.originalListener !== func);
     }
   }
 
