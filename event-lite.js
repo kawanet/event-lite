@@ -126,7 +126,7 @@ function EventLite() {
     return that;
 
     function ne(test) {
-      return test !== func && (!test.originalListener || test.originalListener !== func);
+      return test !== func && test.originalListener !== func;
     }
   }
 
