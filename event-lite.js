@@ -1,5 +1,5 @@
 /**
- * event-lite.js - Light-weight EventEmitter (less than 1KB when minified)
+ * event-lite.js - Light-weight EventEmitter (less than 1KB when gzipped)
  *
  * @copyright Yusuke Kawasaki
  * @license MIT

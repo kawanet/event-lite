@@ -1,6 +1,6 @@
 # event-lite.js [![npm version](https://badge.fury.io/js/event-lite.svg)](http://badge.fury.io/js/event-lite) [![Build Status](https://travis-ci.org/kawanet/event-lite.svg?branch=master)](https://travis-ci.org/kawanet/event-lite)
 
-Light-weight EventEmitter (less than 1KB when minified)
+Light-weight EventEmitter (less than 1KB when gzipped)
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/event-lite.svg)](https://saucelabs.com/u/event-lite)
 
@@ -49,7 +49,7 @@ npm install event-lite --save
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Yusuke Kawasaki
+Copyright (c) 2015-2016 Yusuke Kawasaki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
