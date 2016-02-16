@@ -2,7 +2,7 @@
 
 var assert = require("assert");
 var EventLite = require("../event-lite");
-var TITLE = __filename.replace(/^.*\//, "") + ":";
+var TITLE = __filename.replace(/^.*\//, "");
 
 events_test();
 
