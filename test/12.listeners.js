@@ -31,6 +31,25 @@ function events_test() {
       assert.equal(event.listeners, null, "listeners property should be removed");
       done();
     });
+    
+    it("off() should treat \"\" as a valid event name", function(done) {
+      var event = EventLite();
+      event.on("", NOP);
+      event.on("foo", NOP);
+      event.off("");
+      assert.ok(event.listeners instanceof Object, "listeners property should be an Object");
+      assert.ok(event.listeners[""] === undefined, "the \"\" event should be removed");
+      assert.ok(event.listeners.foo.length === 1, "the \"foo\" event should have one listener");
+      done();
+    });
+    
+    it("off() should remove listeners that were added by once()", function(done) {
+      var event = EventLite();
+      event.once("foo", NOP);
+      event.off("foo", NOP);
+      assert.equal(event.listeners, null, "listeners property should be removed");
+      done();
+    });
   });
 }
 
