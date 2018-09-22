@@ -38,5 +38,6 @@
   "scripts": {
     "fixpack": "fixpack",
     "test": "make test"
-  }
+  },
+  "typings": "event-lite.d.ts"
 }
