@@ -12,10 +12,10 @@ function MyClass() {...}             // your class
 EventLite.mixin(MyClass.prototype);  // import event methods
 
 var obj = new MyClass();
-obj.on("foo", function() {...});     // add event listener
-obj.once("bar", function() {...});   // add one-time event listener
-obj.emit("foo");                     // dispatch event
-obj.emit("bar");                     // dispatch another event
+obj.on("foo", function(v) {...});    // add event listener
+obj.once("bar", function(v) {...});  // add one-time event listener
+obj.emit("foo", v);                  // dispatch event
+obj.emit("bar", v);                  // dispatch another event
 obj.off("foo");                      // remove event listener
 ```
 
@@ -29,6 +29,23 @@ npm install event-lite --save
 
 ```html
 <script src="https://raw.githubusercontent.com/kawanet/event-lite/master/dist/event-lite.min.js"></script>
+```
+
+### TypeScript
+
+```typescript
+import EventLite = require("event-lite");
+
+class MyClass() extends EventLite {
+    // your class
+}
+
+const obj = new MyClass();
+obj.on("foo", v => {...});           // add event listener
+obj.once("bar", v => {...});         // add one-time event listener
+obj.emit("foo", v);                  // dispatch event
+obj.emit("bar", v);                  // dispatch another event
+obj.off("foo");                      // remove event listener
 ```
 
 ### Repository
