@@ -1,7 +1,7 @@
 {
   "name": "event-lite",
   "description": "Light-weight EventEmitter (less than 1KB when gzipped)",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "@kawanet",
   "bugs": {
     "url": "https://github.com/kawanet/event-lite/issues"
@@ -10,11 +10,10 @@
     "Joshua Wise <josh@joshuawise.ninja>"
   ],
   "devDependencies": {
-    "jsdoc": "^3.4.0",
-    "jshint": "^2.9.1",
-    "mocha": "^2.4.5",
-    "uglify-js": "^2.6.1",
-    "zuul": "^3.9.0"
+    "jsdoc": "^3.5.5",
+    "jshint": "^2.9.6",
+    "mocha": "^5.2.0",
+    "uglify-js": "^3.4.9"
   },
   "homepage": "https://github.com/kawanet/event-lite",
   "jshintConfig": {
@@ -37,6 +36,7 @@
     "url": "https://github.com/kawanet/event-lite.git"
   },
   "scripts": {
+    "fixpack": "fixpack",
     "test": "make test"
   }
 }
