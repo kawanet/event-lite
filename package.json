@@ -17,6 +17,12 @@
     "mocha": "^10.2.0",
     "terser": "^5.16.3"
   },
+  "files": [
+    "browser/import.js",
+    "dist/event-lite.min.js",
+    "event-lite.d.ts",
+    "event-lite.js"
+  ],
   "homepage": "https://github.com/kawanet/event-lite",
   "jshintConfig": {
     "bitwise": true,
@@ -47,7 +53,9 @@
     "url": "https://github.com/kawanet/event-lite.git"
   },
   "scripts": {
+    "build": "make clean all",
     "fixpack": "fixpack",
+    "prepack": "npm run build && npm test",
     "test": "make test"
   },
   "typings": "event-lite.d.ts"

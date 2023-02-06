@@ -1,6 +1,7 @@
 # event-lite.js
 [![Node.js CI](https://github.com/kawanet/event-lite/workflows/Node.js%20CI/badge.svg?branch=master)](https://github.com/kawanet/event-lite/actions/)
 [![npm version](https://badge.fury.io/js/event-lite.svg)](https://www.npmjs.com/package/event-lite)
+[![gzip size](https://img.badgesize.io/https://unpkg.com/event-lite/dist/event-lite.min.js?compression=gzip)](https://unpkg.com/event-lite/dist/event-lite.min.js)
 
 Light-weight EventEmitter (less than 1KB when gzipped)
 
@@ -30,7 +31,7 @@ npm install event-lite --save
 ### Browsers
 
 ```html
-<script src="https://raw.githubusercontent.com/kawanet/event-lite/master/dist/event-lite.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/event-lite/dist/event-lite.min.js"></script>
 ```
 
 ### TypeScript
