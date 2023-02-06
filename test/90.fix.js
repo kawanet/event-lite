@@ -1,23 +1,26 @@
-#!/usr/bin/env mocha -R spec
+/* jshint esversion:6 */
 
-var assert = require("assert").strict;
-var EventLite = require("../event-lite");
-var TITLE = __filename.replace(/^.*\//, "");
+const assert = require("assert").strict;
+const EventLite = require("../event-lite");
+const TITLE = __filename.split("/").pop();
 
 events_test();
 
 function events_test() {
   describe(TITLE, function() {
     it("off without on", function() {
-      var event = EventLite();
+      const event = EventLite();
       event.off("foo");
     });
 
     it("off after off", function() {
-      var event = EventLite();
-      event.on("foo");
+      const event = EventLite();
+      let count = 0;
+      event.on("foo", () => count++);
       event.off("foo");
       event.off("bar");
+      event.emit("foo");
+      assert.equal(count, 0);
     });
   });
 }

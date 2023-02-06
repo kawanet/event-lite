@@ -1,8 +1,8 @@
-#!/usr/bin/env mocha -R spec
+/* jshint esversion:6 */
 
-var assert = require("assert").strict;
-var EventLite = require("../event-lite");
-var TITLE = __filename.replace(/^.*\//, "");
+const assert = require("assert").strict;
+const EventLite = require("../event-lite");
+const TITLE = __filename.split("/").pop();
 
 events_test();
 
@@ -10,7 +10,7 @@ function events_test() {
   describe(TITLE, function() {
 
     it("on() adds listeners property", function(done) {
-      var event = EventLite();
+      const event = EventLite();
       event.on("foo");
       assert.ok(event.listeners instanceof Object, "listeners property should be an Object");
       assert.ok(event.listeners.foo instanceof Array, "listeners.foo property should be an Array");
@@ -18,14 +18,14 @@ function events_test() {
     });
 
     it("emit() should NOT add listeners property", function(done) {
-      var event = EventLite();
+      const event = EventLite();
       event.emit("foo");
       assert.equal(!!event.listeners, false, "listeners property should NOT exist");
       done();
     });
 
     it("off() should removes listeners property", function(done) {
-      var event = EventLite();
+      const event = EventLite();
       event.on("foo", NOP);
       event.off("foo", NOP);
       assert.equal(!!event.listeners, false, "listeners property should be removed");
@@ -33,7 +33,7 @@ function events_test() {
     });
 
     it("off() should treat \"\" as a valid event name", function(done) {
-      var event = EventLite();
+      const event = EventLite();
       event.on("", NOP);
       event.on("foo", NOP);
       event.off("");
@@ -44,7 +44,7 @@ function events_test() {
     });
 
     it("off() should remove listeners that were added by once()", function(done) {
-      var event = EventLite();
+      const event = EventLite();
       event.once("foo", NOP);
       event.off("foo", NOP);
       assert.equal(!!event.listeners, false, "listeners property should be removed");
