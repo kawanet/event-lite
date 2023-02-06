@@ -17,9 +17,18 @@
   },
   "homepage": "https://github.com/kawanet/event-lite",
   "jshintConfig": {
+    "bitwise": true,
+    "browser": true,
+    "eqeqeq": true,
     "mocha": true,
+    "noarg": true,
+    "nocomma": true,
     "node": true,
-    "undef": true
+    "nonbsp": true,
+    "nonew": true,
+    "regexp": true,
+    "undef": true,
+    "unused": true
   },
   "keywords": [
     "browser",
