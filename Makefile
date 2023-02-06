@@ -15,9 +15,11 @@ clean:
 	rm -fr $(DEST)
 
 $(DEST): $(SRC)
-	./node_modules/.bin/uglifyjs $(SRC) -c -m -o $(DEST)
+	./node_modules/.bin/terser --comments=false -c -m -o $@ $<
 
-test: jshint $(DEST)
+test: jshint mocha
+
+mocha: $(DEST)
 	./node_modules/.bin/mocha -R spec $(TESTS)
 
 jshint:
@@ -30,7 +32,7 @@ $(DOC_HTML): README.md $(SRC) $(DOCS_CSS_SRC)
 	./node_modules/.bin/jsdoc -d $(DOCS_DIR) -R README.md $(SRC)
 	cat $(DOCS_CSS_SRC) >> $(DOCS_CSS_DEST)
 	rm -f $(DOCS_DIR)/*.js.html
-	for f in $(DOCS_DIR)/*.html; do perl -i -pe 's#</a> on .* 201.* GMT.*##' $$f; done
+	for f in $(DOCS_DIR)/*.html; do perl -i -pe 's#</a> on .* 202.* GMT.*##' $$f; done
 	for f in $(DOCS_DIR)/*.html; do perl -i -pe 's#<a href=".*.js.html">.*line.*line.*</a>##' $$f; done
 
-.PHONY: all clean test jshint jsdoc
+.PHONY: all clean test jshint jsdoc mocha
