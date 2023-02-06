@@ -1,6 +1,6 @@
 #!/usr/bin/env mocha -R spec
 
-var assert = require("assert");
+var assert = require("assert").strict;
 var EventLite = require("../event-lite");
 var TITLE = __filename.replace(/^.*\//, "");
 
