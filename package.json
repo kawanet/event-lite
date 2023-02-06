@@ -10,6 +10,8 @@
     "Joshua Wise <josh@joshuawise.ninja>"
   ],
   "devDependencies": {
+    "browserify": "^17.0.0",
+    "browserify-sed": "^0.8.0",
     "jsdoc": "^3.5.5",
     "jshint": "^2.13.6",
     "mocha": "^10.2.0",

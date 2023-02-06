@@ -1,3 +1,4 @@
+*.browserify.js
 *.tgz
 *~
 .DS_Store
