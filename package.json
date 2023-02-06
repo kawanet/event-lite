@@ -11,9 +11,9 @@
   ],
   "devDependencies": {
     "jsdoc": "^3.5.5",
-    "jshint": "^2.9.6",
-    "mocha": "^5.2.0",
-    "uglify-js": "^3.4.9"
+    "jshint": "^2.13.6",
+    "mocha": "^10.2.0",
+    "terser": "^5.16.3"
   },
   "homepage": "https://github.com/kawanet/event-lite",
   "jshintConfig": {
