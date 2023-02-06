@@ -5,13 +5,13 @@ Light-weight EventEmitter (less than 1KB when gzipped)
 ### Usage
 
 ```js
-var EventLite = require("event-lite");
+const EventLite = require("event-lite");
 
 function MyClass() {...}             // your class
 
 EventLite.mixin(MyClass.prototype);  // import event methods
 
-var obj = new MyClass();
+const obj = new MyClass();
 obj.on("foo", function(v) {...});    // add event listener
 obj.once("bar", function(v) {...});  // add one-time event listener
 obj.emit("foo", v);                  // dispatch event
@@ -36,7 +36,7 @@ npm install event-lite --save
 ```typescript
 import EventLite = require("event-lite");
 
-class MyClass() extends EventLite {
+class MyClass extends EventLite {
     // your class
 }
 
@@ -64,7 +64,7 @@ obj.off("foo");                      // remove event listener
 
 The MIT License (MIT)
 
-Copyright (c) 2015-2018 Yusuke Kawasaki
+Copyright (c) 2015-2023 Yusuke Kawasaki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

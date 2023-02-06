@@ -1,3 +1,11 @@
-/node_modules
+*.tgz
+*~
+.DS_Store
+.Thumbs
 /.idea
+/.vscode
 /gh-pages
+/node_modules
+/npm-debug.log*
+/package-lock.json
+~$*
