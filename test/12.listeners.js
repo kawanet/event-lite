@@ -2,7 +2,7 @@
 
 const assert = require("assert").strict;
 const EventLite = require("../event-lite");
-const TITLE = __filename.split("/").pop();
+const TITLE = "12.listeners.js";
 
 events_test();
 
