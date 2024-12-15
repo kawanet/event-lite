@@ -5,7 +5,24 @@
 
 Light-weight EventEmitter (less than 1KB when gzipped)
 
-### Usage
+### SYNOPSIS
+
+```js
+import EventLite from "event-lite";
+
+class MyClass extends EventLite {
+    // your class
+}
+
+const obj = new MyClass();
+obj.on("foo", v => {...});           // add event listener
+obj.once("bar", v => {...});         // add one-time event listener
+obj.emit("foo", v);                  // dispatch event
+obj.emit("bar", v);                  // dispatch another event
+obj.off("foo");                      // remove event listener
+```
+
+### Classic Style
 
 ```js
 const EventLite = require("event-lite");
@@ -34,30 +51,13 @@ npm install event-lite --save
 <script src="https://cdn.jsdelivr.net/npm/event-lite/dist/event-lite.min.js"></script>
 ```
 
-### TypeScript
-
-```typescript
-import EventLite = require("event-lite");
-
-class MyClass extends EventLite {
-    // your class
-}
-
-const obj = new MyClass();
-obj.on("foo", v => {...});           // add event listener
-obj.once("bar", v => {...});         // add one-time event listener
-obj.emit("foo", v);                  // dispatch event
-obj.emit("bar", v);                  // dispatch another event
-obj.off("foo");                      // remove event listener
-```
-
 ### Repository
 
 - https://github.com/kawanet/event-lite
 
 ### Documentation
 
-- http://kawanet.github.io/event-lite/EventLite.html
+- https://kawanet.github.io/event-lite/EventLite.html
 
 ### See Also
 

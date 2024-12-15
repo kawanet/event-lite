@@ -17,11 +17,17 @@
     "mocha": "^11.0.1",
     "terser": "^5.37.0"
   },
+  "exports": {
+    "types": "./event-lite.d.ts",
+    "import": "./event-lite.mjs",
+    "require": "./event-lite.js"
+  },
   "files": [
     "browser/import.js",
     "dist/event-lite.min.js",
     "event-lite.d.ts",
-    "event-lite.js"
+    "event-lite.js",
+    "event-lite.mjs"
   ],
   "homepage": "https://github.com/kawanet/event-lite",
   "jshintConfig": {
@@ -58,5 +64,6 @@
     "prepack": "npm run build && npm test",
     "test": "make test"
   },
+  "type": "commonjs",
   "typings": "event-lite.d.ts"
 }
