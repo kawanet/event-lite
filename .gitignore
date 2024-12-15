@@ -1,4 +1,4 @@
-*.browserify.js
+*.browser.js
 *.mjs
 *.tgz
 *~

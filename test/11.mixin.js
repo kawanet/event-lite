@@ -2,7 +2,7 @@
 
 const assert = require("assert").strict;
 const EventLite = require("../event-lite");
-const TITLE = __filename.split("/").pop();
+const TITLE = "11.mixin.js";
 
 function MyEvent() {
   if (!(this instanceof MyEvent)) return new MyEvent();

@@ -10,11 +10,14 @@
     "Joshua Wise <josh@joshuawise.ninja>"
   ],
   "devDependencies": {
-    "browserify": "^17.0.1",
-    "browserify-sed": "^0.8.0",
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-multi-entry": "^6.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "assert": "^1.5.1",
     "jsdoc": "^4.0.4",
     "jshint": "^2.13.6",
     "mocha": "^11.0.1",
+    "rollup": "^4.28.1",
     "terser": "^5.37.0"
   },
   "exports": {

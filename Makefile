@@ -48,9 +48,12 @@ $(ESM_DEST): $(SRC) Makefile
 
 $(ESM_TEST): $(JS_TEST) $(ESM_DEST) Makefile
 	mkdir -p $(dir $@)
-	./node_modules/.bin/browserify --no-bundle-external --no-builtins --exclude event-lite.js $(JS_TEST) --list
-	./node_modules/.bin/browserify --no-bundle-external --no-builtins --exclude event-lite.js $(JS_TEST) |\
-	perl -pe 's#^(.*require\()#/// $$1#; s#^#import EventLite from "../event-lite.mjs";\nimport {strict as assert} from "assert";\n\n# if $$. == 1' > $@
+	./node_modules/.bin/rollup $(JS_TEST) --format esm \
+	--plugin @rollup/plugin-commonjs \
+	--plugin @rollup/plugin-multi-entry \
+	--plugin @rollup/plugin-node-resolve \
+	--external 'assert,../event-lite' |\
+	perl -pe 's#^(import require.*? from .)/.*(.;)#$$1../event-lite.mjs$$2#' > $@
 
 ####
 
