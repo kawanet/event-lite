@@ -56,7 +56,7 @@ smoke-cjs: $(SRC)
 #      by bundlers, so it stays usable as a CommonJS module.
 smoke-minjs: $(JS_DEST)
 	(cat $< && echo '; for (const k of process.argv.slice(2)) { if (typeof globalThis[k] !== "function") { console.error("missing browser export:", k); process.exit(1); } console.log("browser export OK:", k); }') | node - $(NAMED_EXPORTS)
-	node --input-type=commonjs -e 'const m = require("$(JS_DEST)"); for (const k of process.argv.slice(1)) { if (typeof m !== "function") { console.error("missing minjs CJS export:", k); process.exit(1); } console.log("minjs CJS export OK:", k); }' $(NAMED_EXPORTS)
+	node --input-type=commonjs -e 'const m = require("$(JS_DEST)"); for (const k of process.argv.slice(1)) { if (typeof m.prototype[k] !== "function") { console.error("missing minjs CJS method:", k); process.exit(1); } console.log("minjs CJS method OK:", k); }' $(METHODS)
 
 jsdoc: $(DOC_HTML)
 
