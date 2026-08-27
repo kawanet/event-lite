@@ -12,6 +12,10 @@ DOCS_CSS_DEST=./gh-pages/styles/jsdoc-default.css
 ESM_DEST=./event-lite.mjs
 ESM_TEST=./test/test.mjs
 
+CLASS=EventLite
+MINJS_MAX_BYTES := 2000
+NAMED_EXPORTS := on once off emit
+
 all: $(JS_DEST) $(ESM_DEST) $(ESM_TEST) jsdoc
 
 clean:
@@ -19,8 +23,10 @@ clean:
 
 $(JS_DEST): $(SRC)
 	./node_modules/.bin/terser --comments=false -c -m -o $@ $<
+	@ls -l $@
+	@test "$$(wc -c < $@)" -le $(MINJS_MAX_BYTES) || { echo "ERROR: $@ exceeds $(MINJS_MAX_BYTES) byte cap" >&2; exit 1; }
 
-test: jshint mocha
+test: jshint mocha smoke-minjs
 
 mocha: $(JS_DEST) $(ESM_TEST)
 	./node_modules/.bin/mocha -R spec $(JS_TEST)
@@ -28,6 +34,15 @@ mocha: $(JS_DEST) $(ESM_TEST)
 
 jshint:
 	./node_modules/.bin/jshint $(SRC) $(JS_TEST)
+
+# Smoke the .min.js in two consumer shapes:
+#  (1) browser <script>: the bundle leaves a namespace global behind, so
+#      look the exports up as properties of that global.
+#  (2) CJS require(): the same file is published to a CDN and pulled in
+#      by bundlers, so it stays usable as a CommonJS module.
+smoke-minjs: $(JS_DEST)
+	(echo 'module = void 0; exports = void 0;' && cat $< && echo '; for (const k of process.argv.slice(2)) { if (typeof $(CLASS).prototype[k] !== "function") { console.error("missing browser export:", k); process.exit(1); } console.log("browser export OK:", k); }') | node - $(NAMED_EXPORTS)
+	node --input-type=commonjs -e 'const m = require("$(JS_DEST)"); for (const k of process.argv.slice(1)) { if (typeof m.prototype[k] !== "function") { console.error("missing minjs CJS export:", k); process.exit(1); } console.log("minjs CJS export OK:", k); }' $(NAMED_EXPORTS)
 
 jsdoc: $(DOC_HTML)
 
@@ -57,4 +72,4 @@ $(ESM_TEST): $(JS_TEST) $(ESM_DEST) Makefile
 
 ####
 
-.PHONY: all clean test jshint jsdoc mocha
+.PHONY: all clean test jshint jsdoc mocha smoke-minjs
