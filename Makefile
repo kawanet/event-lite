@@ -12,9 +12,10 @@ DOCS_CSS_DEST=./gh-pages/styles/jsdoc-default.css
 ESM_DEST=./event-lite.mjs
 ESM_TEST=./test/test.mjs
 
-CLASS=EventLite
 MINJS_MAX_BYTES := 2000
-NAMED_EXPORTS := on once off emit
+ESM_MAX_BYTES := 6000
+NAMED_EXPORTS := EventLite
+METHODS := on once off emit
 
 all: $(JS_DEST) $(ESM_DEST) $(ESM_TEST) jsdoc
 
@@ -26,7 +27,7 @@ $(JS_DEST): $(SRC)
 	@ls -l $@
 	@test "$$(wc -c < $@)" -le $(MINJS_MAX_BYTES) || { echo "ERROR: $@ exceeds $(MINJS_MAX_BYTES) byte cap" >&2; exit 1; }
 
-test: jshint mocha smoke-minjs
+test: jshint mocha smoke
 
 mocha: $(JS_DEST) $(ESM_TEST)
 	./node_modules/.bin/mocha -R spec $(JS_TEST)
@@ -35,14 +36,27 @@ mocha: $(JS_DEST) $(ESM_TEST)
 jshint:
 	./node_modules/.bin/jshint $(SRC) $(JS_TEST)
 
+# Note: process.argv.slice(1) is used because `node -e 'code' arg1 arg2`
+# results in process.argv = ['node', 'arg1', 'arg2'].
+smoke: smoke-mjs smoke-cjs smoke-minjs
+
+# MJS smoke test via public entrypoint. The package default exports the
+# constructor, so the documented methods sit on its prototype.
+smoke-mjs: $(ESM_DEST)
+	node --input-type=module -e 'const m = await import("event-lite"); for (const k of process.argv.slice(1)) { if (typeof m.default.prototype[k] !== "function") { console.error("missing MJS method:", k); process.exit(1); } console.log("MJS method OK:", k); }' $(METHODS)
+
+# CJS smoke test via public entrypoint.
+smoke-cjs: $(SRC)
+	node --input-type=commonjs -e 'const m = require("event-lite"); for (const k of process.argv.slice(1)) { if (typeof m.prototype[k] !== "function") { console.error("missing CJS method:", k); process.exit(1); } console.log("CJS method OK:", k); }' $(METHODS)
+
 # Smoke the .min.js in two consumer shapes:
 #  (1) browser <script>: the bundle leaves a namespace global behind, so
 #      look the exports up as properties of that global.
 #  (2) CJS require(): the same file is published to a CDN and pulled in
 #      by bundlers, so it stays usable as a CommonJS module.
 smoke-minjs: $(JS_DEST)
-	(echo 'module = void 0; exports = void 0;' && cat $< && echo '; for (const k of process.argv.slice(2)) { if (typeof $(CLASS).prototype[k] !== "function") { console.error("missing browser export:", k); process.exit(1); } console.log("browser export OK:", k); }') | node - $(NAMED_EXPORTS)
-	node --input-type=commonjs -e 'const m = require("$(JS_DEST)"); for (const k of process.argv.slice(1)) { if (typeof m.prototype[k] !== "function") { console.error("missing minjs CJS export:", k); process.exit(1); } console.log("minjs CJS export OK:", k); }' $(NAMED_EXPORTS)
+	(cat $< && echo '; for (const k of process.argv.slice(2)) { if (typeof globalThis[k] !== "function") { console.error("missing browser export:", k); process.exit(1); } console.log("browser export OK:", k); }') | node - $(NAMED_EXPORTS)
+	node --input-type=commonjs -e 'const m = require("$(JS_DEST)"); for (const k of process.argv.slice(1)) { if (typeof m !== "function") { console.error("missing minjs CJS export:", k); process.exit(1); } console.log("minjs CJS export OK:", k); }' $(NAMED_EXPORTS)
 
 jsdoc: $(DOC_HTML)
 
@@ -60,6 +74,8 @@ $(ESM_DEST): $(SRC) Makefile
 	mkdir -p $(dir $@)
 	perl -pe 's#^(\s*)(\S.*(\(EventLite\)|module.exports))#$$1// $$2#; s#^(function)#export default $$1#' < $< > $@
 	diff $< $@ || true
+	@ls -l $@
+	@test "$$(wc -c < $@)" -le $(ESM_MAX_BYTES) || { echo "ERROR: $@ exceeds $(ESM_MAX_BYTES) byte cap" >&2; exit 1; }
 
 $(ESM_TEST): $(JS_TEST) $(ESM_DEST) Makefile
 	mkdir -p $(dir $@)
@@ -72,4 +88,4 @@ $(ESM_TEST): $(JS_TEST) $(ESM_DEST) Makefile
 
 ####
 
-.PHONY: all clean test jshint jsdoc mocha smoke-minjs
+.PHONY: all clean test jshint jsdoc mocha smoke smoke-mjs smoke-cjs smoke-minjs
