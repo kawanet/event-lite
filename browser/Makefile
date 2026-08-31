@@ -19,7 +19,12 @@ install:
 	cd .. && PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install playwright@$(PLAYWRIGHT_VERSION) --no-save --ignore-scripts --no-audit --no-fund
 	cd .. && npx --no-install playwright install --with-deps --only-shell chromium
 
-test: all
+# tests.html loads the shipped bundle, so ask the root Makefile for it
+# first; whether it rebuilds stays the root Makefile's decision.
+dist:
+	$(MAKE) -C .. dist/event-lite.min.js
+
+test: dist all
 	cd .. && node browser/tests.cli.mjs
 
 $(TEST_DST): $(TEST_SRC) Makefile
@@ -34,4 +39,4 @@ $(TEST_DST): $(TEST_SRC) Makefile
 clean:
 	/bin/rm -fr $(ALL)
 
-.PHONY: all bundled install test clean
+.PHONY: all bundled dist install test clean
