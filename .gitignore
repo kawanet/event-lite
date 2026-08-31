@@ -1,4 +1,3 @@
-*.browser.js
 *.mjs
 *.tgz
 *~
@@ -6,8 +5,10 @@
 .Thumbs
 /.idea
 /.vscode
+browser/tests/
 /gh-pages
 /node_modules
 /npm-debug.log*
 /package-lock.json
 ~$*
+!browser/tests.cli.mjs
