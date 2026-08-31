@@ -1,15 +1,17 @@
 #!/usr/bin/env bash -c make
 
-JS_TEST=../test/*.js
-ALL=test.browser.js
+TEST_SRC := ../test/*.js
+TEST_DST := tests/bundled.js
+
+ALL := $(TEST_DST)
 
 all: $(ALL)
 
 test: all
-	open test.html
 
-test.browser.js: $(JS_TEST) Makefile
-	../node_modules/.bin/rollup $(JS_TEST) --format iife \
+$(TEST_DST): $(TEST_SRC) Makefile
+	mkdir -p $(dir $@)
+	../node_modules/.bin/rollup $(TEST_SRC) --format iife \
 	--plugin @rollup/plugin-commonjs \
 	--plugin @rollup/plugin-multi-entry \
 	--plugin @rollup/plugin-node-resolve \
