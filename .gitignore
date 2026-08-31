@@ -11,3 +11,4 @@ browser/tests/
 /npm-debug.log*
 /package-lock.json
 ~$*
+!browser/tests.cli.mjs

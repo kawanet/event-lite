@@ -1,4 +1,8 @@
-#!/usr/bin/env bash -c make
+# Force bash so `set -o pipefail` works in the recipes below.
+SHELL := bash
+.SHELLFLAGS := -eo pipefail -c
+
+PLAYWRIGHT_VERSION := 1.62.1
 
 TEST_SRC := ../test/*.js
 TEST_DST := tests/bundled.js
@@ -7,7 +11,16 @@ ALL := $(TEST_DST)
 
 all: $(ALL)
 
+bundled: all
+
+# Keep Playwright out of package.json. CI installs it transiently alongside
+# the project's build dependencies, then downloads only the headless shell.
+install:
+	cd .. && PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install playwright@$(PLAYWRIGHT_VERSION) --no-save --ignore-scripts --no-audit --no-fund
+	cd .. && npx --no-install playwright install --with-deps --only-shell chromium
+
 test: all
+	cd .. && node browser/tests.cli.mjs
 
 $(TEST_DST): $(TEST_SRC) Makefile
 	mkdir -p $(dir $@)
@@ -21,4 +34,4 @@ $(TEST_DST): $(TEST_SRC) Makefile
 clean:
 	/bin/rm -fr $(ALL)
 
-.PHONY: all clean test
+.PHONY: all bundled install test clean
