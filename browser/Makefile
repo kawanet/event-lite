@@ -9,7 +9,7 @@ TEST_DST := tests/bundled.js
 
 ALL := $(TEST_DST)
 
-all: $(ALL)
+all: dist $(ALL)
 
 bundled: all
 
@@ -24,7 +24,7 @@ install:
 dist:
 	$(MAKE) -C .. dist/event-lite.min.js
 
-test: dist all
+test: all
 	cd .. && node browser/tests.cli.mjs
 
 $(TEST_DST): $(TEST_SRC) Makefile
