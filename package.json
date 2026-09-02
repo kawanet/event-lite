@@ -13,6 +13,7 @@
     "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-multi-entry": "^7.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
+    "assert": "^2.1.0",
     "jsdoc": "^4.0.5",
     "jshint": "^2.13.6",
     "mocha": "^11.8.0",
