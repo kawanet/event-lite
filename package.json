@@ -1,7 +1,7 @@
 {
   "name": "event-lite",
   "description": "Light-weight EventEmitter (less than 1KB when gzipped)",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "@kawanet",
   "bugs": {
     "url": "https://github.com/kawanet/event-lite/issues"
@@ -15,7 +15,7 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "jsdoc": "^4.0.5",
     "jshint": "^2.13.6",
-    "mocha": "^11.8.0",
+    "mocha": "^12.0.0",
     "rollup": "^4.63.1",
     "terser": "^5.51.2"
   },
