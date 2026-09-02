@@ -34,7 +34,7 @@ mocha: $(JS_DEST) $(ESM_TEST)
 	./node_modules/.bin/mocha -R spec $(ESM_TEST)
 
 jshint:
-	./node_modules/.bin/jshint $(SRC) $(JS_TEST)
+	./node_modules/.bin/jshint . --extra-ext .json
 
 # Note: process.argv.slice(1) is used because `node -e 'code' arg1 arg2`
 # results in process.argv = ['node', 'arg1', 'arg2'].
