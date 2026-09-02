@@ -33,8 +33,10 @@ $(TEST_DST): $(TEST_SRC) Makefile
 	--plugin @rollup/plugin-commonjs \
 	--plugin @rollup/plugin-multi-entry \
 	--plugin @rollup/plugin-node-resolve \
-	--external 'assert,../event-lite' |\
-	perl -pe 's#^}\)\(require.*\);#})(assert, EventLite)#' > $@
+	--external 'assert,../event-lite' \
+	--globals 'assert:assert,../event-lite:EventLite' \
+	--no-makeAbsoluteExternalsRelative \
+	--file $@
 
 clean:
 	/bin/rm -fr $(ALL)

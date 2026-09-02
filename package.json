@@ -1,7 +1,7 @@
 {
   "name": "event-lite",
   "description": "Light-weight EventEmitter (less than 1KB when gzipped)",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "@kawanet",
   "bugs": {
     "url": "https://github.com/kawanet/event-lite/issues"
