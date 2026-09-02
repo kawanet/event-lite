@@ -6,8 +6,10 @@ PLAYWRIGHT_VERSION := 1.62.1
 
 TEST_SRC := ../test/*.js
 TEST_DST := tests/bundled.js
+ASSERT_SRC := ../node_modules/assert/build/assert.js
+ASSERT_DST := tests/assert.shim.js
 
-ALL := $(TEST_DST)
+ALL := $(TEST_DST) $(ASSERT_DST)
 
 all: dist $(ALL)
 
@@ -36,6 +38,15 @@ $(TEST_DST): $(TEST_SRC) Makefile
 	--external 'assert,../event-lite' \
 	--globals 'assert:assert,../event-lite:EventLite' \
 	--no-makeAbsoluteExternalsRelative \
+	--file $@
+
+$(ASSERT_DST): $(ASSERT_SRC) Makefile
+	mkdir -p $(dir $@)
+	../node_modules/.bin/rollup $< --format iife \
+	--plugin @rollup/plugin-commonjs \
+	--plugin @rollup/plugin-node-resolve \
+	--intro "const process = {env: {}}" \
+	--name "assert" \
 	--file $@
 
 clean:
