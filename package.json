@@ -15,7 +15,7 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "jsdoc": "^4.0.5",
     "jshint": "^2.13.6",
-    "mocha": "^12.0.0",
+    "mocha": "^11.8.0",
     "rollup": "^4.63.1",
     "terser": "^5.51.2"
   },
