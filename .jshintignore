@@ -1,4 +1,5 @@
 .github/
 browser/
 dist/
+gh-pages/
 node_modules/
