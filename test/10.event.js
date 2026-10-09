@@ -1,6 +1,7 @@
 /* jshint esversion:6 */
 
-const assert = require("assert").strict;
+const assert = require("node:assert").strict;
+const {describe, it} = require("node:test");
 const EventLite = require("../event-lite");
 const TITLE = "10.event.js";
 
@@ -17,7 +18,7 @@ function events_test() {
     event.on("barz", baz);
     event.once("qux", qux);
 
-    it("first emit", function(done) {
+    it("first emit", function() {
       event.emit("foo");
       event.emit("bar");
       event.emit("baz");
@@ -27,10 +28,9 @@ function events_test() {
       assert.equal(bar.count, 2, "bar should be fired twice");
       assert.equal(baz.count, 2, "baz should be fired twice");
       assert.equal(qux.count, 1, "qux should be fired once");
-      done();
     });
 
-    it("second emit", function(done) {
+    it("second emit", function() {
       event.emit("foo");
       event.emit("bar");
       event.emit("baz");
@@ -40,10 +40,9 @@ function events_test() {
       assert.equal(bar.count, 4, "bar should be fired four times");
       assert.equal(baz.count, 4, "baz should be fired four times");
       assert.equal(qux.count, 1, "qux should be fired once");
-      done();
     });
 
-    it("third emit after some off()", function(done) {
+    it("third emit after some off()", function() {
       event.off("foo", foo);
       event.off("bar");
       event.emit("foo");
@@ -53,20 +52,18 @@ function events_test() {
       assert.equal(foo.count, 2, "foo should not be fired");
       assert.equal(bar.count, 5, "bar should be fired once more");
       assert.equal(baz.count, 6, "baz should be fired again");
-      done();
     });
 
-    it("fourth emit after all off()", function(done) {
+    it("fourth emit after all off()", function() {
       event.off();
       event.emit("bar");
       event.emit("baz");
       event.emit("barz");
       assert.equal(bar.count, 5, "bar should not be fired");
       assert.equal(baz.count, 6, "baz should not be fired");
-      done();
     });
 
-    it("emit with arguments", function(done) {
+    it("emit with arguments", function() {
       event.on("quux", quux);
       event.emit("quux");
       assert.equal(quux.args.length, 0, "no arguments");
@@ -79,7 +76,6 @@ function events_test() {
       assert.equal(quux.args.length, 2, "two arguments");
       assert.equal(quux.args[0], "hoge", "first argument");
       assert.equal(quux.args[1], "pomu", "second argument");
-      done();
     });
 
     it("return value", function() {

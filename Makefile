@@ -27,11 +27,9 @@ $(JS_DEST): $(SRC)
 	@ls -l $@
 	@test "$$(wc -c < $@)" -le $(MINJS_MAX_BYTES) || { echo "ERROR: $@ exceeds $(MINJS_MAX_BYTES) byte cap" >&2; exit 1; }
 
-test: jshint mocha smoke
-
-mocha: $(JS_DEST) $(ESM_TEST)
-	./node_modules/.bin/mocha -R spec $(JS_TEST)
-	./node_modules/.bin/mocha -R spec $(ESM_TEST)
+test: jshint smoke $(JS_DEST) $(ESM_TEST)
+	node --test $(JS_TEST)
+	node --test $(ESM_TEST)
 
 jshint:
 	./node_modules/.bin/jshint . --extra-ext .json
@@ -88,4 +86,4 @@ $(ESM_TEST): $(JS_TEST) $(ESM_DEST) Makefile
 
 ####
 
-.PHONY: all clean test jshint jsdoc mocha smoke smoke-mjs smoke-cjs smoke-minjs
+.PHONY: all clean test jshint jsdoc smoke smoke-mjs smoke-cjs smoke-minjs
