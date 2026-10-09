@@ -1,6 +1,7 @@
 /* jshint esversion:6 */
 
-const assert = require("assert").strict;
+const assert = require("node:assert").strict;
+const {describe, it} = require("node:test");
 const EventLite = require("../event-lite");
 const TITLE = "90.fix.js";
 
