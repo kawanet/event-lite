@@ -17,11 +17,11 @@ install:
 dist:
 	$(MAKE) -C .. dist/event-lite.min.js
 
-test: all install
+test: all
 	cd .. && node ./node_modules/.bin/chromium-js \
 	--script dist/event-lite.min.js \
 	--alias event-lite=browser/import.mjs \
-	browser/tests/bundled.mjs
+	--test browser/tests/bundled.mjs
 
 $(TEST_DST): $(TEST_SRC) Makefile
 	mkdir -p $(dir $@)
