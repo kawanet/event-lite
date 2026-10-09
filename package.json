@@ -34,6 +34,7 @@
   },
   "files": [
     "browser/import.js",
+    "browser/import.mjs",
     "dist/event-lite.min.js",
     "event-lite.d.ts",
     "event-lite.js",
