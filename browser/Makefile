@@ -5,23 +5,37 @@ SHELL := bash
 TEST_SRC := ../test/*.js
 TEST_DST := tests/bundled.mjs
 
-ALL := $(TEST_DST)
+# CI sets CDP_PORT to attach to a running Chrome over CDP instead of installing one.
+PLAYWRIGHT_CONFIG := tests/playwright-config.json
+
+ALL := $(TEST_DST) $(PLAYWRIGHT_CONFIG)
 
 all: dist $(ALL)
 
 bundled: all
 
 install:
-	cd .. && node ./node_modules/.bin/playwright install chromium --only-shell --with-deps
+	if [ -z "$(CDP_PORT)" ]; then \
+		cd .. && node ./node_modules/.bin/playwright install chromium --only-shell --with-deps; \
+	fi
 
 dist:
 	$(MAKE) -C .. dist/event-lite.min.js
 
-test: all
+test: all install
 	cd .. && node ./node_modules/.bin/chromium-js \
+	--playwright-config browser/$(PLAYWRIGHT_CONFIG) \
 	--script dist/event-lite.min.js \
 	--alias event-lite=browser/import.mjs \
 	--test browser/tests/bundled.mjs
+
+$(PLAYWRIGHT_CONFIG): Makefile
+	mkdir -p $(dir $@)
+	if [ -n "$(CDP_PORT)" ]; then \
+		echo '{"connectOverCDP": "http://127.0.0.1:$(CDP_PORT)"}' > $@; \
+	else \
+		echo '{}' > $@; \
+	fi
 
 $(TEST_DST): $(TEST_SRC) Makefile
 	mkdir -p $(dir $@)
