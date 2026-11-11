@@ -10,14 +10,14 @@
     "Joshua Wise <josh@joshuawise.ninja>"
   ],
   "devDependencies": {
-    "@rollup/plugin-alias": "^6.0.0",
+    "@rollup/plugin-alias": "^6.0.1",
     "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-multi-entry": "^7.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "jsdoc": "^4.0.5",
     "jshint": "^2.13.6",
     "playwright-js-cli": "^0.1.0",
-    "rollup": "^4.64.3",
+    "rollup": "^4.68.2",
     "terser": "^5.51.2"
   },
   "devEngines": {
