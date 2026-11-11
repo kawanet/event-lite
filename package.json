@@ -64,6 +64,12 @@
   ],
   "license": "MIT",
   "main": "event-lite.js",
+  "overrides": {
+    "jshint": {
+      "lodash": "^4.18.1",
+      "minimatch": "^3.1.5"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/kawanet/event-lite.git"
