@@ -6,7 +6,7 @@ TEST_SRC := ../test/*.js
 TEST_DST := tests/bundled.mjs
 
 # CI sets CDP_PORT to attach to a running Chrome over CDP instead of installing one.
-PLAYWRIGHT_CONFIG := tests/playwright-config.json
+PLAYWRIGHT_CONFIG := tests/playwright-config-$(or $(CDP_PORT),default).json
 
 ALL := $(TEST_DST) $(PLAYWRIGHT_CONFIG)
 
@@ -49,6 +49,6 @@ $(TEST_DST): $(TEST_SRC) Makefile
 	perl -i -pe 's#^(import) (require.*from .node:)#$$1 * as $$2#' $@
 
 clean:
-	/bin/rm -fr $(ALL)
+	/bin/rm -fr tests $(ALL)
 
 .PHONY: all bundled dist install test clean
