@@ -49,6 +49,6 @@ $(TEST_DST): $(TEST_SRC) Makefile
 	perl -i -pe 's#^(import) (require.*from .node:)#$$1 * as $$2#' $@
 
 clean:
-	/bin/rm -fr $(ALL)
+	/bin/rm -fr tests $(ALL)
 
 .PHONY: all bundled dist install test clean
