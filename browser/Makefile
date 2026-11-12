@@ -6,7 +6,7 @@ TEST_SRC := ../test/*.js
 TEST_DST := tests/bundled.mjs
 
 # CI sets CDP_PORT to attach to a running Chrome over CDP instead of installing one.
-PLAYWRIGHT_CONFIG := tests/playwright-config.json
+PLAYWRIGHT_CONFIG := tests/playwright-config-$(or $(CDP_PORT),default).json
 
 ALL := $(TEST_DST) $(PLAYWRIGHT_CONFIG)
 
